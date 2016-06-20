@@ -1,1 +1,3 @@
-# Bot1
+#Kaitlyn_Bot
+ Is a bot for free use 
+
