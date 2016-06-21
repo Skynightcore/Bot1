@@ -1,7 +1,17 @@
-#Kaitlyn_Bot
- Hello make name is Sky I'm creater of  Kaitlyn_Bot 
+## Kaitlyn_Bot
  
- This bot made in JavaS
+ Hello my name is Sky I'm creater of  Kaitlyn_Bot 
  
+ This bot made in JavaScript
  
- if u want it to join ur server
+ ------------------------------------------------------------------------------
+(Use this to add the bot to your server [https://discordapp.com/oauth2/authorize?&client_id=192766791196475392&scope=bot&permissions=12659727]
+
+
+----------------------------------------------------------------------------------
+
+
+## COMMANDS
+~help to see a list of commands.
+
+~gif if u want random Gif you can use a tag [example: ~gif cat] would give u a cat gif. 

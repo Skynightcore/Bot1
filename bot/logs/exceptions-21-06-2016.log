@@ -1,0 +1,24 @@
+2016-06-21T02:52:16.833Z - error: uncaughtException: bot is not defined date=Tue Jun 21 2016 02:52:16 GMT+0000 (UTC), pid=196805, uid=1000, gid=1000, cwd=/home/ubuntu/workspace, execPath=/home/ubuntu/.nvm/versions/node/v4.4.5/bin/node, version=v4.4.5, argv=[/home/ubuntu/.nvm/versions/node/v4.4.5/bin/node, /home/ubuntu/workspace/Kaitlyn_bot.js], rss=65265664, heapTotal=40407648, heapUsed=26980784, loadavg=[2.931640625, 3.5869140625, 3.85986328125], uptime=7828165
+ReferenceError: bot is not defined
+    at Object.<anonymous> (/home/ubuntu/workspace/bot/commands.js:1218:1)
+    at Module._compile (module.js:409:26)
+    at Object.Module._extensions..js (module.js:416:10)
+    at Module.load (module.js:343:32)
+    at Function.Module._load (module.js:300:12)
+    at Module.require (module.js:353:17)
+    at require (internal/module.js:12:17)
+    at Object.<anonymous> (/home/ubuntu/workspace/Kaitlyn_bot.js:31:16)
+    at Module._compile (module.js:409:26)
+    at Object.Module._extensions..js (module.js:416:10)
+2016-06-21T03:23:37.530Z - error: uncaughtException: Cannot read property 'on' of undefined date=Tue Jun 21 2016 03:23:37 GMT+0000 (UTC), pid=198323, uid=1000, gid=1000, cwd=/home/ubuntu/workspace, execPath=/home/ubuntu/.nvm/versions/node/v4.4.5/bin/node, version=v4.4.5, argv=[/home/ubuntu/.nvm/versions/node/v4.4.5/bin/node, /home/ubuntu/workspace/Kaitlyn_bot.js], rss=65290240, heapTotal=40407648, heapUsed=26987296, loadavg=[3.349609375, 3.048828125, 3.349609375], uptime=7830046
+TypeError: Cannot read property 'on' of undefined
+    at Object.<anonymous> (/home/ubuntu/workspace/bot/commands.js:1222:4)
+    at Module._compile (module.js:409:26)
+    at Object.Module._extensions..js (module.js:416:10)
+    at Module.load (module.js:343:32)
+    at Function.Module._load (module.js:300:12)
+    at Module.require (module.js:353:17)
+    at require (internal/module.js:12:17)
+    at Object.<anonymous> (/home/ubuntu/workspace/Kaitlyn_bot.js:31:16)
+    at Module._compile (module.js:409:26)
+    at Object.Module._extensions..js (module.js:416:10)

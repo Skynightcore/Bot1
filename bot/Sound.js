@@ -1,33 +1,23 @@
-var Youtube = require("youtube-api")
-var AsciiTable = require("ascii-table");
-var numeral = require("numeral");
-var request = require("request");
-var version = require("../package.json").version;
+////////////////////////////////////////////////////////////////////////////////
+//					      Copyright (C) agubelu 2016                          //   
+//                                                                            //   
+//    This program is free software: you can redistribute it and/or modify    //   
+//    it under the terms of the GNU General Public License as published by    //   
+//    the Free Software Foundation, either version 3 of the License, or       //   
+//    (at your option) any later version.                                     //   
+//                                                                            //   
+//    This program is distributed in the hope that it will be useful,         //   
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of          //   
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           //   
+//    GNU General Public License for more details.                            //   
+//                                                                            //   
+//    You should have received a copy of the GNU General Public License       //   
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.   //   
+////////////////////////////////////////////////////////////////////////////////
 
-
-var config = require("./config.json");
-
-function correctUsage(cmd, usage, msg, bot, delay) {
-  bot.sendMessage(msg, msg.author.username.replace(/@/g, "@\u200b") + ", the correct usage is *`" + config.command_prefix + cmd + " " + usage + "`*", (erro, wMessage) => {
-    bot.deleteMessage(wMessage, {
-      "wait": delay || 10000
-    });
-  });
-  bot.deleteMessage(msg, {
-    "wait": 10000
-  });
-}
-var aliases = {
-  "stop": "stop",
-  "req": "request",
-  "res": "resume",
-  "n": "np",
-  "com": "commands"
-  "set": "setnp",
-};
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////// DEFAULT MESSAGES ///////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var replyTextToDirectMessages = "I'm agubot! Use !commands on a public chat room to see the command list.";
 var replyTextToMentions = "Use !commands to see the command list.";
@@ -36,7 +26,7 @@ var replyTextToMentions = "Use !commands to see the command list.";
 /////////////////////////////////////////////// COMMANDS ///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var commands = 
+var commands = [
 
 	{
 		command: "stop",
@@ -435,6 +425,9 @@ var checkQueue = function() {
 	setTimeout(checkQueue, 5000);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////// AUXILIARY FUNCTIONS ///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function hasPermission(user, command) {
 	

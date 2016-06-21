@@ -13,6 +13,22 @@ var config = require("./config.json");
 var ChatLog = require("./logger.js").ChatLog;
 var Logger = require("./logger.js").Logger;
 
+///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+///////////////////////////////////////////////////
+var myID, serverName, channelName, textChannelName;
+var stopped = false;
+var np = true;
+
+var nowPlayingTitle = "";
+var nowPlayingUser = "";
+
+var queue = [];
+
+var queueLimit = 20;
+
+
+
 
 function correctUsage(cmd, usage, msg, bot, delay) {
   bot.sendMessage(msg, msg.author.username.replace(/@/g, "@\u200b") + ", the correct usage is *`" + config.command_prefix + cmd + " " + usage + "`*", (erro, wMessage) => {
@@ -54,9 +70,37 @@ var config = {
 
 var commands = {
   
+  "gif": {
+    name: "gif",
+    description: "Returns a random gif matching the tags passed.",
+    extendedhelp: "I will search Giphy for a gif matching your tags.",
+    usage: "<image tags>",
+    process: function(bot, msg, suffix) {
+      var tags = suffix.split(" ");
+      get_gif(tags, function(id) {
+        if (typeof id !== "undefined") {
+          bot.sendMessage(msg.channel, "http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
+        } else {
+          bot.sendMessage(msg.channel, "Invalid tags, try something different. For example, something that exists [Tags: " + (tags ? tags : "Random GIF") + "]");
+        }
+      });
+    }
+  },
+  "play": {
+    desc: "Sets the bot as playing a specific game",
+    deleteCommand: true,
+    cooldown: 10,
+    usage: "play <game>",
+    process: function(bot, msg, suffix) {
+      bot.setPlayingGame(suffix, function(error, server){
+        Logger.log('error', error);
+      });
+    }
+  },
   
+
   "help": {
-    desc: "Sends a DM containing all of the commands. If a command is specified, gives info on that command.",
+    desc: "Sends a DM containing all of the commands. If a command is specified, gives nfo on that command.",
     usage: "[command]",
     deleteCommand: true,
     shouldDisplay: false,
@@ -110,22 +154,6 @@ var commands = {
           });
         }
       }
-    }
-  },
-  "gif": {
-    name: "gif",
-    description: "Returns a random gif matching the tags passed.",
-    extendedhelp: "I will search Giphy for a gif matching your tags.",
-    usage: "<image tags>",
-    process: function(bot, msg, suffix) {
-      var tags = suffix.split(" ");
-      get_gif(tags, function(id) {
-        if (typeof id !== "undefined") {
-          bot.sendMessage(msg.channel, "http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
-        } else {
-          bot.sendMessage(msg.channel, "Invalid tags, try something different. For example, something that exists [Tags: " + (tags ? tags : "Random GIF") + "]");
-        }
-      });
     }
   },
     "join-server": {
