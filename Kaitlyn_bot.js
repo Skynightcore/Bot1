@@ -411,12 +411,6 @@ function evaluateString(msg) {
     console.log("Result: " + result);
   }
 }
-
-
-
-
-
-
 function reload() {
   delete require.cache[require.resolve(__dirname + "/bot/config.json")];
   delete require.cache[require.resolve(__dirname + "/bot/commands.js")];

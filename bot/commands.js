@@ -13,19 +13,6 @@ var config = require("./config.json");
 var ChatLog = require("./logger.js").ChatLog;
 var Logger = require("./logger.js").Logger;
 
-///////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-///////////////////////////////////////////////////
-var myID, serverName, channelName, textChannelName;
-var stopped = false;
-var np = true;
-
-var nowPlayingTitle = "";
-var nowPlayingUser = "";
-
-var queue = [];
-
-var queueLimit = 20;
 
 
 
@@ -44,7 +31,7 @@ var aliases = {
   "h": "help",
   "commands": "help",
   "myid": "id",
-  "join": "join-server",
+  "invite": "join-server",
   "gametime": "time",
   "hs": "stats",
   "rs3stats": "stats",
@@ -57,7 +44,9 @@ var aliases = {
   "xplamp": "lamp",
   "jackoftrades": "jot",
   "rago": "vorago",
-  "rax": "araxxi"
+  "rax": "araxxi",
+  "join": "JoinVoice",
+  "leave": "LeaveVoice"
 };
 
 var config = {
@@ -1088,6 +1077,24 @@ var commands = {
           msg.reply(":game_die: Rolled a **" + roll + "** out of **" + suffix + "**.");
         }
       }
+    }
+  },
+  "JoinVoice": {
+    desc: "",
+    usage: "",
+    process: (bot, msg, channel) => {
+      bot.joinVoiceChannel(channel, function(error, connection){
+        Logger.log('error', error);
+      });
+    }
+  },
+  "LeaveVoice": {
+    desc: "",
+    usage: "",
+    process: (bot, msg, suffix) => {
+      bot.leaveVoiceChannel(suffix, function(error, server){
+        Logger.log('error', error);
+      });
     }
   },
   "twitch": {
