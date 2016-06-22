@@ -6,16 +6,41 @@ var numeral = require("numeral");
 var request = require("request");
 var version = require("../package.json").version;
 var qs = require("querystring");
+var Discord = require("discord.js");
+
+var stopped = false;
+var np = true;
+
+var nowPlayingTitle = "";
+var nowPlayingUser = "";
+
+var queue = [];
+
+var bot = new Discord.Client();
+
+var queueLimit = 20;
+
 /**
  * Required Files
  */
 var config = require("./config.json");
 var ChatLog = require("./logger.js").ChatLog;
 var Logger = require("./logger.js").Logger;
+/**
+ * Variables required for VC joining and leaving
+ */
+var list = {};
+var time = {};
+var status = {};
 
 
 
 
+var stopped = false;
+var bot = new Discord.Client();
+var np = true;
+
+var serverName, textChannelName;
 
 function correctUsage(cmd, usage, msg, bot, delay) {
   bot.sendMessage(msg, msg.author.username.replace(/@/g, "@\u200b") + ", the correct usage is *`" + config.command_prefix + cmd + " " + usage + "`*", (erro, wMessage) => {
@@ -45,8 +70,8 @@ var aliases = {
   "jackoftrades": "jot",
   "rago": "vorago",
   "rax": "araxxi",
-  "join": "JoinVoice",
-  "leave": "LeaveVoice"
+  "join": "jvc",
+  "leave": "dvc"
 };
 
 var config = {
@@ -75,6 +100,42 @@ var commands = {
       });
     }
   },
+  "dvc": {
+    name: "Disconnects VC",
+  
+    description: "",
+    extendedhelp: "",
+      deleteCommand: true,
+    usage: "",
+    process: function(bot, msg, suffix) {
+      var VC = bot.voiceConnection.voiceChannel;
+      bot.leaveVoiceChannel(VC);
+      //console.log(bot.voiceConnection.voiceChannel);
+      bot.sendMessage(msg.channel, "`Left Voice Channel`");
+    }
+  },
+  "jvc": {
+    name: "joinVC",
+    description: "This make the bot join the room",
+    usage: "",
+    process: function(bot, msg, suffix) {
+      bot.sendMessage(msg.channel, "I am connected to " + bot.voiceConnections.length + " voice channels");
+      // CHECK IF IS ALREADY CONNECT
+      if (bot.voiceConnections.length>0){
+        bot.sendMessage(msg.channel, "I'am Already Connect to a VC. Disconnect me First using ~dvc");
+        return;
+      }
+      // GETS THE STATE OF BOT IF ON A VC OR NOT
+      var voiceCheck = bot.voiceConnections.find((r) => r.voiceConnection.guild.id === msg.guild.id);
+      // VALIDATION TO SEE IF SHOULD JOIN
+      if (!voiceCheck && !suffix) {
+        var VC = msg.author.voiceChannel;
+        bot.joinVoiceChannel(VC);
+        bot.sendMessage(msg.channel, "Seems i can connect lets see which VC.");
+      }
+    }
+  },
+
   "play": {
     desc: "Sets the bot as playing a specific game",
     deleteCommand: true,
@@ -86,8 +147,6 @@ var commands = {
       });
     }
   },
-  
-
   "help": {
     desc: "Sends a DM containing all of the commands. If a command is specified, gives nfo on that command.",
     usage: "[command]",
@@ -177,7 +236,7 @@ var commands = {
     }
   },
   
-    "leave": {
+    "leaveServer": {
     desc: "Asks the bot to leave the current server.",
     process: function(bot, msg, suffix) {
       if (msg.channel.server) {
@@ -198,40 +257,6 @@ var commands = {
     }
   },
   
-   "image": {
-    desc: "Gets image matching tags from Google.",
-    usage: "<image tags>",
-    process: function(bot, msg, suffix) {
-      if(!config || !config.youtube_api_key || !config.google_custom_search){
-      			bot.sendMessage(msg.channel, "Image search requires both a YouTube API key and a Google Custom Search key!");
-      			return;
-      		}
-      		//gets us a random result in first 5 pages
-      		var page = 1 + Math.floor(Math.random() * 5) * 10; //we request 10 items
-          var request = require("request");
-      		request("https://www.googleapis.com/customsearch/v1?key=" + config.youtube_api_key + "&cx=" + config.google_custom_search + "&q=" + (suffix.replace(/\s/g, '+')) + "&searchType=image&alt=json&num=10&start="+page, function(err, res, body) {
-      			var data, error;
-      			try {
-      				data = JSON.parse(body);
-      			} catch (error) {
-      				Logger.error(error);
-      				return;
-      			}
-      			if(!data){
-      				Logger.debug(data);
-      				bot.sendMessage(msg.channel, "Error:\n" + JSON.stringify(data));
-      				return;
-      			}
-      			else if (!data.items || data.items.length === 0){
-      				Logger.debug(data);
-      				bot.sendMessage(msg.channel, "No result for '" + suffix + "'");
-      				return;
-      			}
-      			var randResult = data.items[Math.floor(Math.random() * data.items.length)];
-      			bot.sendMessage(msg.channel, randResult.title + '\n' + randResult.link);
-      		});
-      Logger.log("debug", "I've looked for images of " + suffix + " for " + msg.sender.username);
-  }},
   "id": {
     desc: "Returns your ID (or the channel's)",
     usage: "[\"channel\"]",
@@ -1079,22 +1104,20 @@ var commands = {
       }
     }
   },
-  "JoinVoice": {
-    desc: "",
-    usage: "",
-    process: (bot, msg, channel) => {
-      bot.joinVoiceChannel(channel, function(error, connection){
-        Logger.log('error', error);
-      });
-    }
-  },
-  "LeaveVoice": {
-    desc: "",
-    usage: "",
-    process: (bot, msg, suffix) => {
-      bot.leaveVoiceChannel(suffix, function(error, server){
-        Logger.log('error', error);
-      });
+  "kappa": {
+    name: "kappa",
+    description: "Kappa all day long!",
+    extendedhelp: "KappaKappaKappaKappaKappaKappaKappaKappaKappaKappa",
+    process: function(bot, msg, suffix) {
+      bot.sendFile(msg.channel, "./images/kappa.png");
+      if (msg.channel.server){
+      var bot_permissions = msg.channel.permissionsOf(bot.user);
+      if (bot_permissions.hasPermission("manageMessages")) {
+        bot.deleteMessage(msg);
+        return;
+      } else {
+        bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+      }}
     }
   },
   "twitch": {

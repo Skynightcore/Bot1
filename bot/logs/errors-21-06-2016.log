@@ -1,8 +1,0 @@
-2016-06-21T22:16:51.012Z - error: 
-2016-06-21T22:17:08.107Z - error: 
-2016-06-21T22:17:20.082Z - error: 
-2016-06-21T22:40:04.164Z - error: 
-2016-06-21T22:48:27.669Z - error:  Error: voice channel does not exist
-    at /home/ubuntu/workspace/node_modules/discord.js/lib/Client/InternalClient.js:7:195
-    at process._tickCallback (node.js:369:9)
-2016-06-21T22:59:03.605Z - error: 
