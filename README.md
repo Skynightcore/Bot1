@@ -14,4 +14,4 @@
 ## COMMANDS
 ~help to see a list of commands.
 
-~gif if u want random Gif you can use a tag [example: ~gif cat] would give u a cat gif. 
+~gif if u want random Gif you can use a tag [example: ~gif cat] would give u a cat gif. # DiscordBot_Sky
